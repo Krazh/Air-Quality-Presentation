@@ -59,6 +59,41 @@ class HentAnalyserGnsByMonthResponse {
   public $HentAnalyserGnsByMonthResult; // ArrayOfAnalyse
 }
 
+class GetAllStof {
+}
+
+class GetAllStofResponse {
+  public $GetAllStofResult; // ArrayOfStof
+}
+
+class GetAllUdstyr {
+}
+
+class GetAllUdstyrResponse {
+  public $GetAllUdstyrResult; // ArrayOfUdstyr
+}
+
+class GetAllEnhed {
+}
+
+class GetAllEnhedResponse {
+  public $GetAllEnhedResult; // ArrayOfEnhed
+}
+
+class GetAllOpstilling {
+}
+
+class GetAllOpstillingResponse {
+  public $GetAllOpstillingResult; // ArrayOfOpstilling
+}
+
+class GetAllMaalested {
+}
+
+class GetAllMaalestedResponse {
+  public $GetAllMaalestedResult; // ArrayOfMaalested
+}
+
 class char {
 }
 
@@ -91,12 +126,22 @@ class AirQualityService extends SoapClient {
                                     'HentAnalyserResponse' => 'HentAnalyserResponse',
                                     'HentAnalyserGnsByMonth' => 'HentAnalyserGnsByMonth',
                                     'HentAnalyserGnsByMonthResponse' => 'HentAnalyserGnsByMonthResponse',
+                                    'GetAllStof' => 'GetAllStof',
+                                    'GetAllStofResponse' => 'GetAllStofResponse',
+                                    'GetAllUdstyr' => 'GetAllUdstyr',
+                                    'GetAllUdstyrResponse' => 'GetAllUdstyrResponse',
+                                    'GetAllEnhed' => 'GetAllEnhed',
+                                    'GetAllEnhedResponse' => 'GetAllEnhedResponse',
+                                    'GetAllOpstilling' => 'GetAllOpstilling',
+                                    'GetAllOpstillingResponse' => 'GetAllOpstillingResponse',
+                                    'GetAllMaalested' => 'GetAllMaalested',
+                                    'GetAllMaalestedResponse' => 'GetAllMaalestedResponse',
                                     'char' => 'char',
                                     'duration' => 'duration',
                                     'guid' => 'guid',
                                    );
 
-  public function AirQualityService($wsdl = "http://localhost:21702/AirQualityService.svc?wsdl", $options = array()) {
+  public function AirQualityService($wsdl = "http://airqualitypresentation.azurewebsites.net/AirQualityService.svc?wsdl", $options = array()) {
     foreach(self::$classmap as $key => $value) {
       if(!isset($options['classmap'][$key])) {
         $options['classmap'][$key] = $value;
@@ -127,6 +172,76 @@ class AirQualityService extends SoapClient {
    */
   public function HentAnalyserGnsByMonth(HentAnalyserGnsByMonth $parameters) {
     return $this->__soapCall('HentAnalyserGnsByMonth', array($parameters),       array(
+            'uri' => 'http://tempuri.org/',
+            'soapaction' => ''
+           )
+      );
+  }
+
+  /**
+   *  
+   *
+   * @param GetAllStof $parameters
+   * @return GetAllStofResponse
+   */
+  public function GetAllStof(GetAllStof $parameters) {
+    return $this->__soapCall('GetAllStof', array($parameters),       array(
+            'uri' => 'http://tempuri.org/',
+            'soapaction' => ''
+           )
+      );
+  }
+
+  /**
+   *  
+   *
+   * @param GetAllUdstyr $parameters
+   * @return GetAllUdstyrResponse
+   */
+  public function GetAllUdstyr(GetAllUdstyr $parameters) {
+    return $this->__soapCall('GetAllUdstyr', array($parameters),       array(
+            'uri' => 'http://tempuri.org/',
+            'soapaction' => ''
+           )
+      );
+  }
+
+  /**
+   *  
+   *
+   * @param GetAllEnhed $parameters
+   * @return GetAllEnhedResponse
+   */
+  public function GetAllEnhed(GetAllEnhed $parameters) {
+    return $this->__soapCall('GetAllEnhed', array($parameters),       array(
+            'uri' => 'http://tempuri.org/',
+            'soapaction' => ''
+           )
+      );
+  }
+
+  /**
+   *  
+   *
+   * @param GetAllOpstilling $parameters
+   * @return GetAllOpstillingResponse
+   */
+  public function GetAllOpstilling(GetAllOpstilling $parameters) {
+    return $this->__soapCall('GetAllOpstilling', array($parameters),       array(
+            'uri' => 'http://tempuri.org/',
+            'soapaction' => ''
+           )
+      );
+  }
+
+  /**
+   *  
+   *
+   * @param GetAllMaalested $parameters
+   * @return GetAllMaalestedResponse
+   */
+  public function GetAllMaalested(GetAllMaalested $parameters) {
+    return $this->__soapCall('GetAllMaalested', array($parameters),       array(
             'uri' => 'http://tempuri.org/',
             'soapaction' => ''
            )
