@@ -1,54 +1,10 @@
 <?php
 
-$colors = "#0075c2,#1aaf5d, #808080, #800000, #FF00FF, #808000, #800080";
-$titel = "Average per day for ";
 
-$airS = new AirQualityService();
-$param2 = new HentAnalyserGnsByMonth;
-$param2->month = 1;
-$param2->stofId = 147;
-
-$result2 = $airS->HentAnalyserGnsByMonth($param2);
-$opstillingId = array();
-$OpstillingName = array();
-$d = array();
-foreach ($result2->HentAnalyserGnsByMonthResult->Analyse as $value) {
-    array_push($opstillingId, $value->Opstilling->Id);
-    array_push($OpstillingName, $value->Opstilling->Maalested->Navn);
-    $d2 = new DateTime($value->Datomaerke);
-    array_push($d, $d2->format("d"));
-}
-
-$duplicateDates = array_unique($d);
-
-$OpstillingIdAndName = array();
-
-
-$unikOpstillingId = array_unique($opstillingId);
-$unikOpstillingNavn = array_unique($OpstillingName);
-
-for ($i = 0; $i < count($unikOpstillingId); $i++) {
-
-    if (!empty($unikOpstillingId[$i])) {
-        $ops = new Opstilling();
-        $ops->Id = $unikOpstillingId[$i];
-        $ops->Navn = $unikOpstillingNavn[$i];
-        array_push($OpstillingIdAndName, $ops);
-    }
-}
-
-$dataset = array();
-
-
-
-
-$month = "January";
-$unit = $result2->HentAnalyserGnsByMonthResult->Analyse[0]->Enhed->Navn;
-$stof = $result2->HentAnalyserGnsByMonthResult->Analyse[0]->Stof->Navn;
 
 $arrData = array(
     "chart" => array(
-        "caption"=> $titel . $stof,
+        "caption"=> $titel . $stofTitel,
         "captionFontSize"=> "14",
         "paletteColors"=> $colors,
         "bgcolor"=> "#ffffff",
