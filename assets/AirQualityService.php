@@ -141,7 +141,7 @@ class AirQualityService extends SoapClient {
                                     'guid' => 'guid',
                                    );
 
-  public function AirQualityService($wsdl = "http://airqualitypresentation.azurewebsites.net/AirQualityService.svc?wsdl", $options = array()) {
+  public function AirQualityService($wsdl = "http://192.168.1.41:8080/AirQualityService.svc?wsdl", $options = array()) {
     foreach(self::$classmap as $key => $value) {
       if(!isset($options['classmap'][$key])) {
         $options['classmap'][$key] = $value;
