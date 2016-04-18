@@ -29,7 +29,7 @@ and open the template in the editor.
 
                         $.ajax({
                             type: "POST",
-                            url: "pages/contentloader.php",
+                            url: "pages/contentLoader.php",
                             data: {data: info},
                             success: function (data) {
                                 var chart = new FusionCharts({

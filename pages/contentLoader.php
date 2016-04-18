@@ -78,7 +78,7 @@ foreach ($OpstillingIdAndName as $value) {
     foreach ($result2->HentAnalyserGnsByMonthResult->Analyse as $analyse) {
         if ($analyse->Opstilling->Id == $value->Id) {
             array_push($tempArr, array(
-                'value' => (float) $analyse->Resultat
+                'value' =>  $analyse->Resultat
             ));
             }
         }
