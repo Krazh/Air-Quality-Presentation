@@ -16,30 +16,36 @@ and open the template in the editor.
     <script src="assets/jquery-1.11.3.js" type="text/javascript"></script>
         <script src="assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/fusioncharts.js" type="text/javascript"></script>
+        <script src="js/themes/fusioncharts.theme.fint.js" type="text/javascript"></script>
         <script>
             $(document).ready(function () {
-                $("#loadButton").click(function() {
-                    var f = $(this.form);
-                    var height = 450;
-                    var width = $("#mainContainer").width();
-                    info = [];
-                    info.push({name: "width", value: width});
-                    info.push(f.serializeArray(f));
-                    $("#chart-1").empty()
-                    
-                    $.ajax({
-                        type: "POST",
-                        url: "pages/contentLoader.php",
-                        data: {data: info},
-                        success: function (data) {
-                            $('#chartDiv').html(data);
-                        }, 
-                        error: function (das) {
-                            alert(das);
-                        }
+                    $('#loadButton').click(function () {
+                        var f = $(this.form);
+                        var height = 450;
+                        var width = $("#mainContainer").width();
+                        info = [];
+                        info.push({name: "width", value: width});
+                        info.push(f.serializeArray(f));
+
+                        $.ajax({
+                            type: "POST",
+                            url: "pages/contentloader.php",
+                            data: {data: info},
+                            success: function (data) {
+                                var chart = new FusionCharts({
+                                    "type": "msline",
+                                    "renderAt": "chartDiv",
+                                    "width": width,
+                                    "height": height,
+                                    "dataFormat": "json",
+                                    "dataSource": data
+                                });
+                                chart.render();
+//                                $('#chartDiv').html(data);
+                            }
+                        });
                     });
                 });
-            })
         </script>
     <body>
         
@@ -53,25 +59,7 @@ and open the template in the editor.
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <span class="navbar-brand"><a href="/" style="font-family: 'Montserrat', sans-serif;">Air Quality 2015</a></span>
-            </div>
-
-            <div class="navbar-collapse collapse pull-right">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="?page=dummy1">Dummy Link 1</a>
-                    </li>
-                    <li>
-                        <a href="?page=dummy2">Dummy Link 2</a>
-                    </li>
-                    <li>
-                        <a href="?page=dummy3">Dummy Link 3</a>
-                    </li>
-                    <li class="visible-xs">
-                        <a href="?page=dummy4">Dummy Link On Small Screen</a>
-                    </li>
-
-                </ul>
+                <span class="navbar-brand"><a href="/airquality/" style="font-family: 'Montserrat', sans-serif;">Air Quality 2015</a></span>
             </div>
             </div>
         </div>
@@ -81,7 +69,7 @@ and open the template in the editor.
         require_once 'includes/global_variables.php';
         $months = array();
         
-        for($i = 1; $i < 5; $i++) {
+        for($i = 1; $i < 13; $i++) {
             array_push($months, $i);
         }
         
@@ -115,7 +103,7 @@ and open the template in the editor.
                 echo '<tr><label>Month:';
                 foreach ($months as $value) {
                     echo '<td style="padding: 5px;"><label style="font-weight: normal !important;"><input type="radio" name="month" value="' . $value . '"';
-                    if ($selectedMonth == $value) {
+                    if ($value == 1) {
                         echo 'checked';
                     }
                     echo '>  ' . getMonth($value) . "</label>";
@@ -127,7 +115,7 @@ and open the template in the editor.
                 echo '<tr><label>Compounds:';
                 foreach ($compounds->GetAllStofResult->Stof as $value) {
                     echo '<td style="padding: 5px;"><label style="font-weight: normal !important;"><input type="radio" name="stoffer" value="' . $value->Id . '"';
-                    if (in_array($value->Id, $stoffer)) {
+                    if ($value->Id == 68) {
                         echo 'checked';
                     }
                     echo '>  ' . $value->Navn . "</label>";
@@ -141,8 +129,9 @@ and open the template in the editor.
             <div class="col-xs-12" id="chartDiv">
                 
             </div>
-            
+            <div class="col-xs-6">
+                By Søren Carlsen and Morten Pedersen
+            </div>
         </div>
-        
     </body>
 </html>
