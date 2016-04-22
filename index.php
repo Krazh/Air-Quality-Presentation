@@ -19,6 +19,28 @@ and open the template in the editor.
     <script src="js/themes/fusioncharts.theme.fint.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
+            var labelClick = function (eventObj, dataObj) {
+                chart.removeEventListener("dataLabelClick", labelClick);
+                var day = dataObj["index"] + 1;
+                var f = $('#submitForm');
+                var tmp = f.serializeArray(f);
+                var info = {
+                    form: tmp,
+                    date: day
+                };
+                
+                $.ajax({
+                    type: "POST",
+                    url: "pages/contentLoader.php",
+                    data: {data: info},
+                    success: function (data) {
+//                        chart.setJSONData(data);
+//                        chart.render();
+                        $('#chartDiv').html(data);
+                    }
+                })
+            }
+            
             var height = 450;
             var width = $("#mainContainer").width();
             var data;
@@ -32,18 +54,17 @@ and open the template in the editor.
             });
 
             $('#loadButton').click(function () {
+                chart.addEventListener("dataLabelClick", labelClick);
                 var f = $(this.form);
-                var dateClicked;
                 var tmp = f.serializeArray(f);
                 var limit;
                 var info = {
-                    form: tmp,
-                    date: dateClicked
+                    form: tmp
                 };
                 
                 $.ajax({
                     type: "POST",
-                    url: "pages/test.php",
+                    url: "pages/contentLoader.php",
                     data: {data: info},
                     success: function (data) {
                         chart.setJSONData(data);

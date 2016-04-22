@@ -4,24 +4,63 @@ require_once $root . 'includes/functions.php';
 require_once $root . 'includes/global_variables.php';
 require_once $root . 'assets/php-wrapper/fusioncharts.php';
 
-$colors = "#0075c2,#1aaf5d, #808080, #800000, #FF00FF, #808000, #800080";
-$titel = "Average per day for ";
-$month = $_POST['data'][1][0]['value'];
-$stof = $_POST['data'][1][1]['value'];
+$colors = "#0075c2,#1aaf5d, #808080, #5DA5DA, #800000, #FF00FF, #4D4D4D, #F17CB0, #B2912F, #B276B2, #DECF3F, #F15854, #9ebcda, #4d004b";
 
-$param2 = new HentAnalyserGnsByMonth;
-$param2->month = $month;
-$param2->stofId = $stof;
+$month = $_POST['data']['form'][0]['value'];
+$stof = $_POST['data']['form'][1]['value'];
+$result2;
+$analyseArray;
+$stofTitel;
+$titel;
 
-$result2 = $airS->HentAnalyserGnsByMonth($param2);
+
+if (isset($_POST['data']['date'])) {
+    $day = $_POST['data']['date'];
+    
+    $p = new GetResultsForDayByCompound;
+    $p->day = $day;
+    $p->month = $month;
+    $p->stofId = $stof;
+    
+    
+    try {
+        $result2 = $airS->GetResultsForDayByCompound($p);
+    $analyseArray = $result2->GetResultsForDayByCompoundResult->Analyse;
+    $stofTitel = $analyseArray[0]->Stof->Navn;
+    $titel = "Daily measurements for " . $stofTitel;
+    } catch (Exception $exc) {
+        echo $exc->getTraceAsString();
+    }
+
+}
+ else {
+    
+    $p = new HentAnalyserGnsByMonth;
+    $p->month = $month;
+    $p->stofId = $stof;
+
+    $result2 = $airS->HentAnalyserGnsByMonth($p);
+    $analyseArray = $result2->HentAnalyserGnsByMonthResult->Analyse;
+    $stofTitel = $analyseArray[0]->Stof->Navn;
+    $titel = "Average per day for " . $stofTitel;
+}
+if (isset($_POST['data']['date'])) {
+    print_r($analyseArray);
+}
+$limit = GetLimitValue($stof);
+
 $opstillingId = array();
 $OpstillingName = array();
-$d = array();
-foreach ($result2->HentAnalyserGnsByMonthResult->Analyse as $value) {
+$category = array();
+foreach ($analyseArray as $value) {                                             // Gets data from array and pushes to seperate arrays
     array_push($opstillingId, $value->Opstilling->Id);
     array_push($OpstillingName, $value->Opstilling->Maalested->Navn);
     $d2 = new DateTime($value->Datomaerke);
-    array_push($d, $d2->format("d"));
+    if (isset($_POST['data']['date'])) {
+        array_push($category, $d2->format("H:i"));
+    } else {
+        array_push($category, $d2->format("d"));
+    }
 }
 
 
@@ -43,13 +82,23 @@ for ($i = 0; $i < count($unikOpstillingId); $i++) {
 }
 
 $dataset = array();
+$line = array();
+$line[0] = array(
+            "startvalue" => $limit,
+            "color" => "#1aaf5d",
+            "displayvalue" => $limit
+        );
+$trend = array();
+$trend[0] = array(
+    "line" => $line
+);
 
-$unit = $result2->HentAnalyserGnsByMonthResult->Analyse[0]->Enhed->Navn;
-$stofTitel = $result2->HentAnalyserGnsByMonthResult->Analyse[0]->Stof->Navn;
+$unit = $analyseArray[0]->Enhed->Navn;
+
 
 $arrData = array(
     "chart" => array(
-        "caption"=> $titel . $stofTitel,
+        "caption"=> $titel,
         "captionFontSize"=> "14",
         "paletteColors"=> $colors,
         "bgcolor"=> "#ffffff",
@@ -67,15 +116,17 @@ $arrData = array(
         "divLineGapLen"=> "1",
         "xAxisName"=> GetMonth($month),
         "yAxisName"=> $unit,
-        "showValues"=> "0"
+        "showValues"=> "0",
+        "anchorRadius"=> "4"
         ),
     "categories" => array(),
-    "dataset" => $dataset
+    "dataset" => $dataset,
+    "trendlines" => $trend
     );
     
 foreach ($OpstillingIdAndName as $value) {
     $tempArr = array();
-    foreach ($result2->HentAnalyserGnsByMonthResult->Analyse as $analyse) {
+    foreach ($analyseArray as $analyse) {
         if ($analyse->Opstilling->Id == $value->Id) {
             array_push($tempArr, array(
                 'value' =>  $analyse->Resultat
@@ -88,15 +139,15 @@ foreach ($OpstillingIdAndName as $value) {
         'data' => $tempArr
     ));
 }
-$duplicateDates = array_unique($d);
-$uniqueDate = array();
-foreach ($duplicateDates as $date) {
-    array_push($uniqueDate, array(
+$uniqueCategories = array_unique($category);
+$uniqueLabels = array();
+foreach ($uniqueCategories as $date) {
+    array_push($uniqueLabels, array(
                 'label' => $date
             ));
 }
 array_push($arrData['categories'], array(
-    'category' => $uniqueDate
+    'category' => $uniqueLabels
 ));
 
 //echo $arrData;

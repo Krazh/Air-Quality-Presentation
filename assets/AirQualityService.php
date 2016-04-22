@@ -4,7 +4,7 @@ class Analyse {
   public $Enhed; // Enhed
   public $Id; // int
   public $Opstilling; // Opstilling
-  public $Resultat; // string
+  public $Resultat; // double
   public $Stof; // Stof
   public $Udstyr; // Udstyr
 }
@@ -57,6 +57,16 @@ class HentAnalyserGnsByMonth {
 
 class HentAnalyserGnsByMonthResponse {
   public $HentAnalyserGnsByMonthResult; // ArrayOfAnalyse
+}
+
+class GetResultsForDayByCompound {
+  public $day; // int
+  public $month; // int
+  public $stofId; // int
+}
+
+class GetResultsForDayByCompoundResponse {
+  public $GetResultsForDayByCompoundResult; // ArrayOfAnalyse
 }
 
 class GetAllStof {
@@ -126,6 +136,8 @@ class AirQualityService extends SoapClient {
                                     'HentAnalyserResponse' => 'HentAnalyserResponse',
                                     'HentAnalyserGnsByMonth' => 'HentAnalyserGnsByMonth',
                                     'HentAnalyserGnsByMonthResponse' => 'HentAnalyserGnsByMonthResponse',
+                                    'GetResultsForDayByCompound' => 'GetResultsForDayByCompound',
+                                    'GetResultsForDayByCompoundResponse' => 'GetResultsForDayByCompoundResponse',
                                     'GetAllStof' => 'GetAllStof',
                                     'GetAllStofResponse' => 'GetAllStofResponse',
                                     'GetAllUdstyr' => 'GetAllUdstyr',
@@ -172,6 +184,20 @@ class AirQualityService extends SoapClient {
    */
   public function HentAnalyserGnsByMonth(HentAnalyserGnsByMonth $parameters) {
     return $this->__soapCall('HentAnalyserGnsByMonth', array($parameters),       array(
+            'uri' => 'http://tempuri.org/',
+            'soapaction' => ''
+           )
+      );
+  }
+
+  /**
+   *  
+   *
+   * @param GetResultsForDayByCompound $parameters
+   * @return GetResultsForDayByCompoundResponse
+   */
+  public function GetResultsForDayByCompound(GetResultsForDayByCompound $parameters) {
+    return $this->__soapCall('GetResultsForDayByCompound', array($parameters),       array(
             'uri' => 'http://tempuri.org/',
             'soapaction' => ''
            )
