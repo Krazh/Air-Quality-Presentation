@@ -14,39 +14,50 @@ and open the template in the editor.
         
     </head>
     <script src="assets/jquery-1.11.3.js" type="text/javascript"></script>
-        <script src="assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="js/fusioncharts.js" type="text/javascript"></script>
-        <script src="js/themes/fusioncharts.theme.fint.js" type="text/javascript"></script>
-        <script>
-            $(document).ready(function () {
-                    $('#loadButton').click(function () {
-                        var f = $(this.form);
-                        var height = 450;
-                        var width = $("#mainContainer").width();
-                        info = [];
-                        info.push({name: "width", value: width});
-                        info.push(f.serializeArray(f));
+    <script src="assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/fusioncharts.js" type="text/javascript"></script>
+    <script src="js/themes/fusioncharts.theme.fint.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            var height = 450;
+            var width = $("#mainContainer").width();
+            var data;
+            var chart = new FusionCharts({
+                        "type": "msline",
+                        "renderAt": "chartDiv",
+                        "width": width,
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": data
+            });
 
-                        $.ajax({
-                            type: "POST",
-                            url: "pages/contentLoader.php",
-                            data: {data: info},
-                            success: function (data) {
-                                var chart = new FusionCharts({
-                                    "type": "msline",
-                                    "renderAt": "chartDiv",
-                                    "width": width,
-                                    "height": height,
-                                    "dataFormat": "json",
-                                    "dataSource": data
-                                });
-                                chart.render();
-//                                $('#chartDiv').html(data);
-                            }
-                        });
-                    });
+            $('#loadButton').click(function () {
+                var f = $(this.form);
+                var dateClicked;
+                var tmp = f.serializeArray(f);
+                var limit;
+                var info = {
+                    form: tmp,
+                    date: dateClicked
+                };
+                
+                $.ajax({
+                    type: "POST",
+                    url: "pages/test.php",
+                    data: {data: info},
+                    success: function (data) {
+                        chart.setJSONData(data);
+                        chart.render();
+//                        $('#chartDiv').html(data);
+                    }
                 });
-        </script>
+            });
+
+            $("#controllers label input").click(function(e) {
+                chart.chartType($(this).attr('value'));
+            });
+        });
+    </script>
     <body>
         
         <div class="menu topBar navbar navbar-default" >
@@ -128,6 +139,14 @@ and open the template in the editor.
             ?>
             <div class="col-xs-12" id="chartDiv">
                 
+            </div>
+            <!-- col-xs-12 -->
+            <div class="col-xs-12" id="chartTypeDiv">
+                <div id='controllers'>
+                    <label><input class='chartType' name='chart-type' id='line' type='radio' value='msline' checked/> Line chart</label>
+                    <label><input class='chartType' name='chart-type' id='bar2d' type='radio' value='msbar2d' /> Bar chart</label>
+                    <label><input class='chartType' name='chart-type' id='column2d' type='radio' value='mscolumn2d' /> Column chart</label>
+                </div>
             </div>
             <div class="col-xs-6">
                 By Søren Carlsen and Morten Pedersen
