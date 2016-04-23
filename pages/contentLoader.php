@@ -44,9 +44,7 @@ if (isset($_POST['data']['date'])) {
     $stofTitel = $analyseArray[0]->Stof->Navn;
     $titel = "Average per day for " . $stofTitel;
 }
-if (isset($_POST['data']['date'])) {
-    print_r($analyseArray);
-}
+
 $limit = GetLimitValue($stof);
 
 $opstillingId = array();

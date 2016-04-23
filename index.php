@@ -34,9 +34,9 @@ and open the template in the editor.
                     url: "pages/contentLoader.php",
                     data: {data: info},
                     success: function (data) {
-//                        chart.setJSONData(data);
-//                        chart.render();
-                        $('#chartDiv').html(data);
+                        chart.setJSONData(data);
+                        chart.render();
+//                        $('#chartDiv').html(data);
                     }
                 })
             }
