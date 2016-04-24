@@ -25,9 +25,9 @@ if (isset($_POST['data']['date'])) {
     
     try {
         $result2 = $airS->GetResultsForDayByCompound($p);
-    $analyseArray = $result2->GetResultsForDayByCompoundResult->Analyse;
-    $stofTitel = $analyseArray[0]->Stof->Navn;
-    $titel = "Daily measurements for " . $stofTitel;
+        $analyseArray = $result2->GetResultsForDayByCompoundResult->Analyse;
+        $stofTitel = $analyseArray[0]->Stof->Navn;
+        $titel = "Daily measurements for " . $stofTitel;
     } catch (Exception $exc) {
         echo $exc->getTraceAsString();
     }
